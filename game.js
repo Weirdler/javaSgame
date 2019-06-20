@@ -13,7 +13,7 @@ var won = false;
 var lost = false;
 var currentScore = 0;
 var winningScore = 100;
-var mySound
+var bgmusic;
 
 // add collectable items to the game
 function addItems() {
@@ -114,7 +114,7 @@ function itemHandler(player, item) {
   // add 1 if item is coin
   currentScore = currentScore + 1;
   }
-  if (currentScore === winningScore) {
+  if (currentScore >= winningScore) {
       createBadge( 400, 350);
   }
   // subtract 20 points if poison
@@ -140,7 +140,7 @@ window.onload = function () {
   // before the game begins
   function preload() {
     game.stage.backgroundColor = '#5db1ad';
-    
+    game.load.audio('bgmusic', 'assets/Gangplank Galleon Big Band.mp3')
     //Load images
     game.load.image('star', 'assets/star.png')
     game.load.image('poison', 'assets/poison.png')
@@ -164,6 +164,9 @@ window.onload = function () {
     player.body.collideWorldBounds = true;
     player.body.gravity.y = 800;
 
+    game.sound.setDecodedCallback([ bgmusic],
+      start, this);
+      
     addItems();
     addPlatforms();
 
@@ -184,10 +187,6 @@ window.onload = function () {
     game.physics.arcade.overlap(player, items, itemHandler);
     game.physics.arcade.overlap(player, badges, badgeHandler);
     player.body.velocity.x = 0;
-
-    mySound = new sound("Gangplank Galleon Big Band.mp3");
-    mySound.play()
-
 
     // is the left cursor key presssed?
     if (cursors.left.isDown) {
